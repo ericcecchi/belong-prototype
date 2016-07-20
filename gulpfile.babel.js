@@ -91,7 +91,7 @@ gulp.task('styles', () => {
     .pipe($.sourcemaps.init())
     .pipe($.sass({
         includePaths: [
-            'node_modules/normalize.css'
+            'node_modules'
         ],
         precision: 10
     }).on('error', $.sass.logError))
