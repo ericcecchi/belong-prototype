@@ -1,0 +1,21 @@
+{
+  "opportunity": {
+    "id": 0,
+    "createdAt": "",
+    "title": "",
+    "description": "",
+    "category": "",
+    "location": "",
+    "time": "",
+    "tags": []
+  },
+  "organization": {
+    "id": 0,
+    "createdAt": "",
+    "name": "",
+    "bio": "",
+    "location": "",
+    "website": "",
+    "categories": []
+  }
+}
