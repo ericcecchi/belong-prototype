@@ -78,8 +78,8 @@ export default class App extends Component {
             );
 
         return (
-            <div className="Belong">
-                <div className="SpaceBetween">
+            <div className={'Belong'+ (this.state.selected !== null ? ' selected' : '')}>
+                <div className="Header">
                     <div>
                         <select>
                             <option>Volunteer</option>
