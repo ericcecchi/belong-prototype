@@ -8,6 +8,28 @@ function getYoutubeId(videoUrl) {
     return videoUrl && (videoUrl.split('v=')[1] || false);
 }
 
+export function getOrganizations() {
+    return new Promise((resolve) => {
+        ajax.get('https://spreadsheets.google.com/feeds/list/1hetYu_LEuuim1efw0aFxv6lOYLjhU8-e7wkIZHupW_o/2/public/full?alt=json')
+            .then(response => {
+                const raw = response.data.feed.entry;
+                const orgs = raw
+                    .map(org => {
+                        return {
+                            id: org['gsx$id']['$t'],
+                            name: org['gsx$name']['$t'],
+                            bio: org['gsx$bio']['$t'],
+                            website: org['gsx$website']['$t'],
+                            logo: org['gsx$logo']['$t']
+                        }
+                    })
+                    .filter((org) => !!org.name);
+
+                resolve(orgs);
+            });
+    });
+}
+
 export function getOpportunities() {
     return new Promise((resolve) => {
         ajax.get('https://spreadsheets.google.com/feeds/list/1hetYu_LEuuim1efw0aFxv6lOYLjhU8-e7wkIZHupW_o/1/public/full?alt=json')

@@ -47,7 +47,9 @@ export default class DetailView extends React.Component {
                             {filters.map(filter => <li>{filter}</li>)}
                         </ul>
                     </div>
-                    <p>{organization} is a nonprofit based in the West Town neighborhood of Chicago.</p>
+                    <h3>About {organization.name}</h3>
+                    <p>{organization.bio}</p>
+                    <p><a href={organization.website} target="_belong-organization">Visit website</a></p>
                 </div>
                 <div className="DetailFoot">
                     <button className="DetailFootButton" type="button">Count me in!</button>

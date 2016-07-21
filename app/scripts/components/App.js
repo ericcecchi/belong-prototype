@@ -17,6 +17,7 @@ export default class App extends Component {
             filters: [],
             moreFilters: false,
             opportunities: null,
+            organizations: null,
             selected: null,
         };
         this.setSelected = this.setSelected.bind(this);
@@ -27,6 +28,13 @@ export default class App extends Component {
         API.getOpportunities().then((opportunities) => {
             this.setState({
                 opportunities
+            });
+        });
+
+        API.getOrganizations().then((organizations) => {
+            console.log('orgs: ' + organizations)
+            this.setState({
+                organizations
             });
         });
     }
@@ -82,6 +90,8 @@ export default class App extends Component {
                     <a href="#">Learn more</a>
                 </div>
             );
+        const selectedOpportunity = this.state.selected && opportunities[this.state.selected];
+        const selectedOrg = this.state.selected && this.state.organizations.find(org => org.name == selectedOpportunity.organization);
 
         return (
             <div className={'Belong'+ (this.state.selected !== null ? ' selected' : '')}>
@@ -128,7 +138,7 @@ export default class App extends Component {
                 {opportunities && opportunities.map((opportunity, index) => {
                     return <ListItem key={index} onClick={this.setSelected.bind(null, index)} {...opportunity}/>;
                 })}
-                {this.state.selected !== null && opportunities[this.state.selected] && <DetailView {...opportunities[this.state.selected]} />}
+                {this.state.selected !== null && opportunities[this.state.selected] && <DetailView {...selectedOpportunity} organization={selectedOrg} />}
             </div>
         );
     }
