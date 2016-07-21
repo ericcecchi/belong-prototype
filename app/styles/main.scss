@@ -111,12 +111,15 @@ button:hover {
     flex: 1;
     overflow: scroll;
     padding: 0 40px 40px;
+
+    img {
+        width: 400px;
+    }
 }
 .DetailsOrganization {
     margin-top: 3rem;
 }
 .DetailFoot {
-    flex: 0 80px;
     padding: 20px;
     box-shadow: 0 0 6px rgba(black,.16), 0 3px 6px rgba(black,.23);
 }
