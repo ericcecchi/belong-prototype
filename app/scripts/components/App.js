@@ -10,6 +10,14 @@ const Filters = {
     }
 };
 
+const Callouts = {
+    'A Home': 'On any given night, there are over 43 million children who sleep with no roof over their heads. What if we could provide resources, hope, and a place to belong?',
+    'Health': 'More than 25% of our nation suffers from mental illness alone. Is there a way we could bring healing, hope, and belonging to those without health?',
+    'Money': 'While progress is being made, there are still close to 800 million in our world who are chronically undernourished. Join those providing basic needs for the under-resourced.',
+    'Freedom': 'There are an estimated 4.5 million people trapped in forced sexual exploitation globally. Join the movement to bring freedom and hope to people who are enslaved or imprisoned today.',
+    'Family': '132 million children worldwide are orphans, making them more at risk for trafficking and other dangers. Let’s join those who are trying to bring hope and a place to belong.',
+};
+
 export default class App extends Component {
     constructor(props) {
         super(props);
@@ -65,7 +73,7 @@ export default class App extends Component {
                 name: 'byCategory',
                 value: category
             });
-            this.setState(Object.assign({}, currentState));
+            this.setState(Object.assign({}, currentState, {selected: null}));
         }
     }
 
@@ -86,12 +94,12 @@ export default class App extends Component {
         const callout = category && (
                 <div className="Callout">
                     <h1>Without {categoryName}</h1>
-                    <p>Every year more than 23,000 children age out of foster care, leaving them without families of their own.</p>
+                    <p>{Callouts[categoryName]}</p>
                     <a href="#">Learn more</a>
                 </div>
             );
-        const selectedOpportunity = this.state.selected && opportunities[this.state.selected];
-        const selectedOrg = this.state.selected && this.state.organizations.find(org => org.name == selectedOpportunity.organization);
+        const selectedOpportunity = this.state.selected != null && opportunities[this.state.selected];
+        const selectedOrg = this.state.selected != null && this.state.organizations.find(org => org.name == selectedOpportunity.organization);
 
         return (
             <div className={'Belong'+ (this.state.selected !== null ? ' selected' : '')}>
@@ -110,7 +118,7 @@ export default class App extends Component {
                     <select onChange={this.setCategory.bind(this)}>
                         <option value="" default>in need</option>
                         <option value="Family">without family</option>
-                        <option value="Food">without food</option>
+                        <option value="Health">without good health</option>
                         <option value="Freedom">without freedom</option>
                         <option value="A Home">without a home</option>
                         <option value="Money">without money</option>
