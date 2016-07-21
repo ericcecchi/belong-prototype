@@ -105,8 +105,10 @@ export default class App extends Component {
             <div className={'Belong'+ (this.state.selected !== null ? ' selected' : '')}>
                 <div className="Header">
                     <div>
-                        <select>
+                        I’m a
+                        <select style={{marginLeft: '10px'}}>
                             <option>Volunteer</option>
+                            <option>Group Leader</option>
                             <option>Nonprofit</option>
                         </select>
                     </div>
