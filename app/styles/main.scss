@@ -1,7 +1,8 @@
 @import "components/normalize";
+@import "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css";
 
 body {
-    background: #eee;
+    color: #607D8B;
     padding: 0 5vw;
     font-family: system, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Lucida Grande";
     font-size: 16px;
@@ -23,6 +24,24 @@ h1 {
 .Callout {
     background: #eee;
     padding: 20px;
+}
+.Category {
+    align-items: center;
+    display: flex;
+}
+.CategoryIcon {
+    align-items: center;
+    border-radius: 50%;
+    border: 2px solid #4CAF50;
+    color: #4CAF50;
+    display: flex;
+    height: 40px;
+    justify-content: center;
+    margin-right: 10px;
+    width: 40px;
+}
+.CategoryIcon .fa {
+    font-size: 20px;
 }
 .ListItem {
     align-items: center;

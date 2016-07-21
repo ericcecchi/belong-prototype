@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import Category from './Category';
+
 export default class DetailView extends React.Component {
     render() {
         const {
@@ -16,7 +18,12 @@ export default class DetailView extends React.Component {
         return (
             <div className="DetailView">
                 <div className="DetailBody">
-                    <h3>{categories.map((category) => category).join(', ')}</h3>
+                    <h3>{categories.map((category) => (
+                      <Category
+                        key={category}
+                        name={category}
+                        showName
+                        textBefore="Helping People Without"/>))}</h3>
                     <img src={imageUrl}/>
                     <h1>{title}</h1>
                     <div dangerouslySetInnerHTML={{__html: description}}/>
