@@ -6,7 +6,6 @@ import Category from './Category';
 export default class DetailView extends React.Component {
     render() {
         const {
-            added,
             description,
             categories,
             ends,
@@ -20,6 +19,7 @@ export default class DetailView extends React.Component {
             ongoing,
             oneTime,
         } = this.props;
+        const added = (Math.floor(Math.random() * 10) + 1) + ' days ago';
         console.log('selected details', this.props);
         const filters = [];
         if (family) filters.push('Family-friendly');
@@ -27,6 +27,15 @@ export default class DetailView extends React.Component {
         if (individual) filters.push('Individual-friendly');
         if (ongoing) filters.push('Ongoing');
         if (oneTime) filters.push('One-time');
+
+        const filterDetails = filters.length > 0 && (
+            <div className="DetailFilters">
+                <h3>This opportunity is:</h3>
+                <ul>
+                    {filters.map(filter => <li>{filter}</li>)}
+                </ul>
+            </div>
+        );
 
         return (
             <div className="DetailView">
@@ -41,12 +50,7 @@ export default class DetailView extends React.Component {
                     <h1>{title}</h1>
                     <div dangerouslySetInnerHTML={{__html: parse(description)}}/>
                     <p><strong>Starts: {starts} • Ends: {ends} • Added: {added}</strong></p>
-                    <div className="DetailFilters">
-                        <h3>This opportunity is:</h3>
-                        <ul>
-                            {filters.map(filter => <li>{filter}</li>)}
-                        </ul>
-                    </div>
+                    {filterDetails}
                     <h3>About {organization.name}</h3>
                     <p>{organization.bio}</p>
                     <p><a href={organization.website} target="_belong-organization">Visit website</a></p>
