@@ -51,9 +51,11 @@ export default class DetailView extends React.Component {
                     <div dangerouslySetInnerHTML={{__html: parse(description)}}/>
                     <p><strong>Starts: {starts} • Ends: {ends} • Added: {added}</strong></p>
                     {filterDetails}
-                    <h3>About {organization.name}</h3>
-                    <p>{organization.bio}</p>
-                    <p><a href={organization.website} target="_belong-organization">Visit website</a></p>
+                    <div className="DetailsOrganization">
+                        <h3>About {organization.name}</h3>
+                        <p>{organization.bio}</p>
+                        <p><a href={organization.website} target="_belong-organization">Visit website</a></p>
+                    </div>
                 </div>
                 <div className="DetailFoot">
                     <button className="DetailFootButton" type="button">Count me in!</button>

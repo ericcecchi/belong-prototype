@@ -51,7 +51,7 @@ export function getOpportunities() {
                             ongoing: !!opportunity['gsx$ongoing']['$t'],
                             oneTime: !!opportunity['gsx$one-time']['$t'],
                             videoId: getYoutubeId(opportunity['gsx$video']['$t']),
-                            imageUrl: opportunity['gsx$image']['$t'] || 'https://www.placecage.com/600/400'
+                            imageUrl: opportunity['gsx$image']['$t'] || 'https://placeholdit.imgix.net/~text?txtsize=75&bg=000000&txtclr=ffffff&txt=BELONG&w=640&h=360&txttrack=0'
                         }
                     })
                     .filter((opportunity) => !!opportunity.title);

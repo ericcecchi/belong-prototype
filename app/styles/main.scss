@@ -98,7 +98,7 @@ button:hover {
 .DetailView {
     background: #fff;
     border-left: 1px solid #B0BEC5;
-    box-shadow: -10px 0 10px rgba(96,125,139,.2);
+    box-shadow: 0 0 20px rgba(black,.19), 0 6px 6px rgba(black,.23);
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -112,9 +112,13 @@ button:hover {
     overflow: scroll;
     padding: 0 40px 40px;
 }
+.DetailsOrganization {
+    margin-top: 3rem;
+}
 .DetailFoot {
     flex: 0 80px;
     padding: 20px;
+    box-shadow: 0 0 6px rgba(black,.16), 0 3px 6px rgba(black,.23);
 }
 .DetailFootButton {
     background: #4CAF50;
