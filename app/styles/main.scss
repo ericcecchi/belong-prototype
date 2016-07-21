@@ -1,12 +1,67 @@
 @import "components/normalize";
 
 body {
-  background: #eee;
-  padding: 0 5vw;
-  font-family: system, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Lucida Grande";
-  font-size: 16px;
+    background: #eee;
+    padding: 0 5vw;
+    font-family: system, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Lucida Grande";
+    font-size: 16px;
 }
 
 h1 {
-  font-size: 4rem;
+    font-size: 4rem;
+}
+
+
+.Belong {
+    padding-right: 50%;
+}
+.SpaceBetween {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+.Callout {
+    background: #eee;
+    padding: 20px;
+}
+.ListItem {
+    align-items: center;
+    border-top: 1px solid #ddd;
+    display: flex;
+    padding: 20px;
+}
+.ListItemImage {
+    width: 200px;
+}
+.ListItemImage,
+.ListItemDetails,
+.ListItemButton {
+    flex: 1 1 33%;
+}
+.ListItemDetails {
+    padding: 20px;
+}
+.ListItemButton {}
+.DetailView {
+    background: #fff;
+    border-left: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 50%;
+}
+.DetailBody {
+    flex: 1;
+    overflow: scroll;
+    padding: 20px;
+}
+.DetailFoot {
+    flex: 0 80px;
+    padding: 20px;
+}
+.DetailFootButton {
+    background: #0ad;
+    padding: 10px;
 }
