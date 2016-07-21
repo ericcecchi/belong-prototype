@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 
+import Category from './Category';
+
 export default class ListItem extends Component {
   render () {
     const {
+      categories,
       imageUrl,
       onClick,
       organization,
@@ -10,6 +13,9 @@ export default class ListItem extends Component {
     } = this.props;
     return (
       <div className="ListItem" onClick={onClick}>
+        {false && <div>
+          <Category name={categories[0]} />
+        </div>}
         <div>
           <img className="ListItemImage" src={imageUrl} />
         </div>
