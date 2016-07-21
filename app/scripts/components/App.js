@@ -14,11 +14,13 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            filters: [],
+            moreFilters: false,
             opportunities: null,
             selected: null,
-            filters: [],
         };
         this.setSelected = this.setSelected.bind(this);
+        this.showMoreFilters = this.showMoreFilters.bind(this);
     }
 
     componentDidMount() {
@@ -59,6 +61,10 @@ export default class App extends Component {
         }
     }
 
+    showMoreFilters() {
+        this.setState({moreFilters: true});
+    }
+
     render() {
         console.log('Belong:render', this.state);
         let opportunities = this.state.opportunities;
@@ -89,29 +95,35 @@ export default class App extends Component {
                     <h1>Belong</h1>
                     <button type="button">Sign in</button>
                 </div>
-                <hr />
-                <span> Help people</span>
-                <select onChange={this.setCategory.bind(this)}>
-                    <option value="" default>in need</option>
-                    <option value="Family">without family</option>
-                    <option value="Food">without food</option>
-                    <option value="Freedom">without freedom</option>
-                    <option value="A Home">without a home</option>
-                    <option value="Money">without money</option>
-                </select>
-                <span> near </span>
-                <select>
-                    <option>Chicago</option>
-                    <option>Los Angeles</option>
-                    <option>Minneapolis</option>
-                    <option>Salt Lake City</option>
-                </select>
-                <span>More filters: </span>
-                <input type="checkbox" id="individual"/><label htmlFor="individual">individual</label>
-                <input type="checkbox" id="family"/><label htmlFor="family">family friendly</label>
-                <input type="checkbox" id="group"/><label htmlFor="group">group friendly</label>
-                <input type="checkbox" id="ongoing"/><label htmlFor="ongoing">ongoing</label>
-                <input type="checkbox" id="onetime"/><label htmlFor="onetime">one-time</label>
+                <div className="MainFilters">
+                    <span>Help people </span>
+                    <select onChange={this.setCategory.bind(this)}>
+                        <option value="" default>in need</option>
+                        <option value="Family">without family</option>
+                        <option value="Food">without food</option>
+                        <option value="Freedom">without freedom</option>
+                        <option value="A Home">without a home</option>
+                        <option value="Money">without money</option>
+                    </select>
+                    <span> near </span>
+                    <select>
+                        <option>Chicago</option>
+                        <option>Los Angeles</option>
+                        <option>Minneapolis</option>
+                        <option>Salt Lake City</option>
+                    </select>
+                    <button type="button" className="MoreFiltersButton" onClick={this.showMoreFilters}>More filters</button>
+                </div>
+                {this.state.moreFilters && (
+                    <div className="MoreFilters">
+                        <span>More filters: </span>
+                        <input type="checkbox" id="individual"/> <label htmlFor="individual">individual</label>
+                        <input type="checkbox" id="family"/> <label htmlFor="family">family friendly</label>
+                        <input type="checkbox" id="group"/> <label htmlFor="group">group friendly</label>
+                        <input type="checkbox" id="ongoing"/> <label htmlFor="ongoing">ongoing</label>
+                        <input type="checkbox" id="onetime"/> <label htmlFor="onetime">one-time</label>
+                    </div>
+                )}
                 {callout}
                 {opportunities && opportunities.map((opportunity, index) => {
                     return <ListItem key={index} onClick={this.setSelected.bind(null, index)} {...opportunity}/>;
