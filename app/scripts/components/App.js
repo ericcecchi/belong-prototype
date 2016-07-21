@@ -17,16 +17,16 @@ export default class App extends Component {
     componentDidMount() {
         API.getOpportunities().then((opportunities) => {
             this.setState({
-                opportunities: opportunities,
+                opportunities
             });
         });
     }
 
-    setSelected (id) {
+    setSelected(id) {
         this.setState({selected: id});
     }
 
-    render () {
+    render() {
         console.log('Belong:render', this.state);
         return (
             <div className="Belong">
@@ -68,7 +68,7 @@ export default class App extends Component {
                     <a href="#">Learn more</a>
                 </div>
                 {this.state.opportunities && this.state.opportunities.map((opportunity, index) => {
-                    return <ListItem id={index} key={index} onClick={this.setSelected} {...opportunity}/>;
+                    return <ListItem key={index} onClick={this.setSelected.bind(null, index)} {...opportunity}/>;
                 })}
                 {this.state.selected !== null && <DetailView {...this.state.opportunities[this.state.selected]} />}
             </div>
