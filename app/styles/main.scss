@@ -14,6 +14,10 @@ h1 {
     font-size: 2rem;
 }
 
+[type=checkbox] {
+    margin-right: .3em;
+}
+
 img { max-width: 100%; }
 button {
     cursor: pointer;
@@ -125,6 +129,7 @@ button {
     top: 10px;
     right: 40px;
     padding: 10px;
+
     background: none;
     border: 0;
     color: $color-primary;

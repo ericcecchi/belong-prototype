@@ -11,7 +11,7 @@ export default class Category extends Component {
             Family: 'child',
             Freedom: 'link',
             Health: 'medkit',
-            'A Home': 'home',
+            Homes: 'home',
             Money: 'money',
         };
         return (

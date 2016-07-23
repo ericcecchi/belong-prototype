@@ -5,10 +5,19 @@ import Category from './Category';
 import DetailView from './DetailView';
 import ListItem from './ListItem';
 
+function booleanFilter(things, property) {
+    return things.filter((thing) => thing[property]);
+}
+
 const Filters = {
-    byCategory: function (opportunities, category) {
+    category: function (opportunities, category) {
         return opportunities.filter((opportunity) => opportunity.categories && opportunity.categories.indexOf(category) > -1);
-    }
+    },
+    individual: (opportunities) => booleanFilter(opportunities, 'individual'),
+    family: (opportunities) => booleanFilter(opportunities, 'family'),
+    group: (opportunities) => booleanFilter(opportunities, 'group'),
+    oneTime: (opportunities) => booleanFilter(opportunities, 'oneTime'),
+    ongoing: (opportunities) => booleanFilter(opportunities, 'ongoing'),
 };
 
 const Callouts = {
@@ -52,10 +61,10 @@ export default class App extends Component {
         this.setState({selected: id});
     }
 
-    removeCategory() {
+    removeFilter(name) {
         const currentState = this.state;
-        currentState.filters.find((filter) => {
-            if (filter.name == 'byCategory') {
+        const hadFilter = currentState.filters.find((filter) => {
+            if (filter.name == name) {
                 currentState.filters.splice(currentState.filters.indexOf(filter), 1);
                 return true;
             } else {
@@ -63,18 +72,28 @@ export default class App extends Component {
             }
         });
         this.setState(Object.assign({}, currentState));
+        return hadFilter;
     }
 
-    setCategory(event) {
+    hasFilter(name) {
         const currentState = this.state;
-        const category = event.target.value;
-        this.removeCategory();
-        if (category) {
-            currentState.filters.push({
-                name: 'byCategory',
-                value: category
-            });
-            this.setState(Object.assign({}, currentState, {selected: null}));
+        return !!currentState.filters.find((filter) => {
+            return filter.name == name;
+        });
+    }
+
+    toggleFilter(name, isBoolean = false) {
+        return (event) => {
+            const currentState = this.state;
+            const value = event.target.value;
+            const hadFilter = this.removeFilter(name);
+            if (value && (!isBoolean || !hadFilter)) {
+                currentState.filters.push({
+                    name,
+                    value
+                });
+                this.setState(Object.assign({}, currentState, {selected: null}));
+            }
         }
     }
 
@@ -90,7 +109,7 @@ export default class App extends Component {
                 opportunities = Filters[filter['name']](opportunities, filter['value']);
             });
         }
-        const category = this.state.filters.find((filter) => filter.name == 'byCategory');
+        const category = this.state.filters.find((filter) => filter.name == 'category');
         const categoryName = category ? category.value : 'things';
         const callout = category && (
                 <div className="Callout">
@@ -128,7 +147,7 @@ export default class App extends Component {
                     </div>
                     <div className="MainFilters">
                         <span>Help people </span>
-                        <select onChange={this.setCategory.bind(this)}>
+                        <select onChange={this.toggleFilter('category').bind(this)}>
                             <option value="" default>in any need</option>
                             <option value="Family">without family</option>
                             <option value="Health">without health</option>
@@ -148,17 +167,47 @@ export default class App extends Component {
                     {this.state.moreFilters && (
                         <div className="MoreFilters">
                             <span>More filters: </span>
-                            <input type="checkbox" id="individual"/> <label htmlFor="individual">individual</label>
-                            <input type="checkbox" id="family"/> <label htmlFor="family">family friendly</label>
-                            <input type="checkbox" id="group"/> <label htmlFor="group">group friendly</label>
-                            <input type="checkbox" id="ongoing"/> <label htmlFor="ongoing">ongoing</label>
-                            <input type="checkbox" id="onetime"/> <label htmlFor="onetime">one-time</label>
+                            <input
+                                type="checkbox"
+                                id="individual"
+                                onChange={this.toggleFilter('individual', true).bind(this)}
+                                value={this.hasFilter.call(this, 'individual')} />
+                            <label htmlFor="individual">individual</label>
+
+                            <input
+                                type="checkbox"
+                                id="family"
+                                onChange={this.toggleFilter('family', true).bind(this)}
+                                value={this.hasFilter.call(this, 'family')} />
+                            <label htmlFor="family">family friendly</label>
+
+                            <input
+                                type="checkbox"
+                                id="group"
+                                onChange={this.toggleFilter('group', true).bind(this)}
+                                value={this.hasFilter.call(this, 'group')} />
+                            <label htmlFor="group">group friendly</label>
+
+                            <input
+                                type="checkbox"
+                                id="ongoing"
+                                onChange={this.toggleFilter('ongoing', true).bind(this)}
+                                value={this.hasFilter.call(this, 'ongoing')} />
+                            <label htmlFor="ongoing">ongoing</label>
+
+                            <input
+                                type="checkbox"
+                                id="oneTime"
+                                onChange={this.toggleFilter('oneTime', true).bind(this)}
+                                value={this.hasFilter.call(this, 'oneTime')} />
+                            <label htmlFor="oneTime">one-time</label>
                         </div>
                     )}
                     {callout}
                     {opportunities && opportunities.map((opportunity, index) => {
                         return <ListItem key={index} onClick={this.setSelected.bind(null, index)} {...opportunity}/>;
                     })}
+                    {opportunities && opportunities.length == 0 && <h2>No opportunities found with selected filters.</h2>}
                 </div>
             </div>
         );
