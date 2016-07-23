@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as API from './API';
 
+import Category from './Category';
 import DetailView from './DetailView';
 import ListItem from './ListItem';
 
@@ -29,7 +30,7 @@ export default class App extends Component {
             selected: null,
         };
         this.setSelected = this.setSelected.bind(this);
-        this.showMoreFilters = this.showMoreFilters.bind(this);
+        this.toggleMoreFilters = this.toggleMoreFilters.bind(this);
     }
 
     componentDidMount() {
@@ -77,8 +78,8 @@ export default class App extends Component {
         }
     }
 
-    showMoreFilters() {
-        this.setState({moreFilters: true});
+    toggleMoreFilters() {
+        this.setState({moreFilters: !this.state.moreFilters});
     }
 
     render() {
@@ -93,7 +94,12 @@ export default class App extends Component {
         const categoryName = category ? category.value : 'things';
         const callout = category && (
                 <div className="Callout">
-                    <h1>Without {categoryName}</h1>
+                    <h1>
+                        <Category
+                            name={categoryName}
+                            showName
+                            textBefore="Without"/>
+                    </h1>
                     <p>{Callouts[categoryName]}</p>
                     <a href="#">Learn more</a>
                 </div>
@@ -103,52 +109,57 @@ export default class App extends Component {
 
         return (
             <div className={'Belong'+ (this.state.selected !== null ? ' selected' : '')}>
-                <div className="Header">
-                    <div>
-                        I’m a
-                        <select style={{marginLeft: '10px'}}>
-                            <option>Volunteer</option>
-                            <option>Group Leader</option>
-                            <option>Nonprofit</option>
+                <div className="DetailView-container">
+                    {this.state.selected !== null && opportunities[this.state.selected] && <DetailView {...selectedOpportunity} organization={selectedOrg} closeView={this.setSelected.bind(this, null)} />}
+                </div>
+
+                <div className="Belong-main">
+                    <div className="Header">
+                        <div>
+                            I’m a
+                            <select style={{marginLeft: '10px'}}>
+                                <option>Volunteer</option>
+                                <option>Group Leader</option>
+                                <option>Nonprofit</option>
+                            </select>
+                        </div>
+                        <h1>Belong</h1>
+                        <button className="Button LinkButton" type="button">Sign in</button>
+                    </div>
+                    <div className="MainFilters">
+                        <span>Help people </span>
+                        <select onChange={this.setCategory.bind(this)}>
+                            <option value="" default>in any need</option>
+                            <option value="Family">without family</option>
+                            <option value="Health">without health</option>
+                            <option value="Freedom">without freedom</option>
+                            <option value="A Home">without homes</option>
+                            <option value="Money">without money</option>
                         </select>
+                        <span> near </span>
+                        <select>
+                            <option>Chicago</option>
+                            <option>Los Angeles</option>
+                            <option>Minneapolis</option>
+                            <option>Salt Lake City</option>
+                        </select>
+                        <button type="button" className="Button LinkButton" onClick={this.toggleMoreFilters}>More filters</button>
                     </div>
-                    <h1>Belong</h1>
-                    <button type="button">Sign in</button>
+                    {this.state.moreFilters && (
+                        <div className="MoreFilters">
+                            <span>More filters: </span>
+                            <input type="checkbox" id="individual"/> <label htmlFor="individual">individual</label>
+                            <input type="checkbox" id="family"/> <label htmlFor="family">family friendly</label>
+                            <input type="checkbox" id="group"/> <label htmlFor="group">group friendly</label>
+                            <input type="checkbox" id="ongoing"/> <label htmlFor="ongoing">ongoing</label>
+                            <input type="checkbox" id="onetime"/> <label htmlFor="onetime">one-time</label>
+                        </div>
+                    )}
+                    {callout}
+                    {opportunities && opportunities.map((opportunity, index) => {
+                        return <ListItem key={index} onClick={this.setSelected.bind(null, index)} {...opportunity}/>;
+                    })}
                 </div>
-                <div className="MainFilters">
-                    <span>Help people </span>
-                    <select onChange={this.setCategory.bind(this)}>
-                        <option value="" default>in need</option>
-                        <option value="Family">without family</option>
-                        <option value="Health">without good health</option>
-                        <option value="Freedom">without freedom</option>
-                        <option value="A Home">without a home</option>
-                        <option value="Money">without money</option>
-                    </select>
-                    <span> near </span>
-                    <select>
-                        <option>Chicago</option>
-                        <option>Los Angeles</option>
-                        <option>Minneapolis</option>
-                        <option>Salt Lake City</option>
-                    </select>
-                    <button type="button" className="MoreFiltersButton" onClick={this.showMoreFilters}>More filters</button>
-                </div>
-                {this.state.moreFilters && (
-                    <div className="MoreFilters">
-                        <span>More filters: </span>
-                        <input type="checkbox" id="individual"/> <label htmlFor="individual">individual</label>
-                        <input type="checkbox" id="family"/> <label htmlFor="family">family friendly</label>
-                        <input type="checkbox" id="group"/> <label htmlFor="group">group friendly</label>
-                        <input type="checkbox" id="ongoing"/> <label htmlFor="ongoing">ongoing</label>
-                        <input type="checkbox" id="onetime"/> <label htmlFor="onetime">one-time</label>
-                    </div>
-                )}
-                {callout}
-                {opportunities && opportunities.map((opportunity, index) => {
-                    return <ListItem key={index} onClick={this.setSelected.bind(null, index)} {...opportunity}/>;
-                })}
-                {this.state.selected !== null && opportunities[this.state.selected] && <DetailView {...selectedOpportunity} organization={selectedOrg} />}
             </div>
         );
     }

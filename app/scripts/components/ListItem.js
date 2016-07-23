@@ -20,11 +20,11 @@ export default class ListItem extends Component {
           <img className="ListItemImage" src={imageUrl} />
         </div>
         <div className="ListItemDetails">
-          <h1>{title}</h1>
+          <h2>{title}</h2>
           {organization}
         </div>
         <div>
-          <button className="ListItemButton" type="button">Learn more</button>
+          <button className="Button ListItemButton" type="button">Learn more</button>
         </div>
       </div>
     );

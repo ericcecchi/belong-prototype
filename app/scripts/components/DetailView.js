@@ -43,6 +43,7 @@ export default class DetailView extends React.Component {
 
         return (
             <div className="DetailView">
+                <button className="DetailClose" onClick={this.props.closeView}>&times;</button>
                 <div className="DetailBody">
                     <h3>{categories.map((category) => (
                       <Category
@@ -51,7 +52,7 @@ export default class DetailView extends React.Component {
                         showName
                         textBefore="Helping People Without"/>))}</h3>
                     <img src={imageUrl}/>
-                    <h1>{title}</h1>
+                    <h2>{title}</h2>
                     <p><strong>{starts}</strong></p>
                     <div dangerouslySetInnerHTML={{__html: parse(description)}}/>
                     <p><strong>Location: </strong> 1 Infinite Loop, Cupertino, CA 95014</p>
@@ -63,7 +64,7 @@ export default class DetailView extends React.Component {
                     </div>
                 </div>
                 <div className="DetailFoot">
-                    <button className="DetailFootButton" type="button" onClick={sendEmail}>Count me in!</button>
+                    <button className="Button DetailFootButton" type="button" onClick={sendEmail}>Count me in!</button>
                 </div>
             </div>
         );

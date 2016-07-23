@@ -1,6 +1,9 @@
 @import "components/normalize";
 @import "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css";
 
+$color-primary: #4CAF50;
+$color-primary-dark: #43A047;
+
 body {
     color: #607D8B;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -12,29 +15,31 @@ h1 {
 }
 
 img { max-width: 100%; }
-
 button {
-    background: white;
-    border: 2px solid #4CAF50;
-    border-radius: 4px;
-    color: #4CAF50;
     cursor: pointer;
     font-weight: bold;
-    min-width: 120px;
+}
+.Button {
+    background: white;
+    border: 2px solid $color-primary;
+    border-radius: 4px;
+    color: $color-primary;
     padding: 10px;
 }
-button:hover {
-    background: #4CAF50;
+.Button:hover {
+    background: $color-primary;
     color: white;
 }
 
-.Belong {
+.Belong-main {
     margin: 0 auto;
-    max-width: 1100px;
+    max-width: 50%;
+    background: #fff;
+    transition: all 300ms ease-out;
 }
-.Belong.selected {
-    margin: 0;
-    padding-right: 50%;
+.Belong.selected .Belong-main {
+    transform: translateX(-50%);
+    box-shadow: 0 0 20px rgba(black,.19), 0 6px 6px rgba(black,.23);
 }
 .Header {
     align-items: center;
@@ -51,9 +56,10 @@ button:hover {
     border-bottom: 2px solid #B0BEC5;
     padding: 10px 20px;
 }
-.MoreFiltersButton {
+.LinkButton {
     border: none;
     text-decoration: underline;
+    margin-left: 10px;
 }
 .MoreFilters label {
     margin-right: 10px;
@@ -70,8 +76,8 @@ button:hover {
 .CategoryIcon {
     align-items: center;
     border-radius: 50%;
-    border: 2px solid #4CAF50;
-    color: #4CAF50;
+    border: 2px solid $color-primary;
+    color: $color-primary;
     display: flex;
     height: 40px;
     justify-content: center;
@@ -96,17 +102,37 @@ button:hover {
     flex: 1;
     padding: 0 20px;
 }
-.DetailView {
+.DetailView-container {
     background: #fff;
-    border-left: 1px solid #B0BEC5;
-    box-shadow: 0 0 20px rgba(black,.19), 0 6px 6px rgba(black,.23);
-    display: flex;
-    flex-direction: column;
     position: fixed;
     right: 0;
     top: 0;
     width: 50%;
     height: 100%;
+    transform: translateX(100%);
+    transition: transform 300ms ease-out;
+}
+.Belong.selected .DetailView-container {
+    transform: translateX(0);
+}
+.DetailView {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.DetailClose {
+    position: fixed;
+    top: 10px;
+    right: 40px;
+    padding: 10px;
+    background: none;
+    border: 0;
+    color: $color-primary;
+    font-size: 2rem;
+    line-height: 2rem;
+    &:hover {
+        color: $color-primary-dark;
+    }
 }
 .DetailBody {
     flex: 1;
@@ -125,12 +151,12 @@ button:hover {
     box-shadow: 0 0 6px rgba(black,.16), 0 3px 6px rgba(black,.23);
 }
 .DetailFootButton {
-    background: #4CAF50;
+    background: $color-primary;
     color: white;
     font-size: 1.2rem;
     max-width: 300px;
     width: 100%;
 }
 .DetailFootButton:hover {
-    background: #43A047;
+    background: $color-primary-dark;
 }
