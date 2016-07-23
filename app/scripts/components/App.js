@@ -33,7 +33,7 @@ export default class App extends Component {
         super(props);
         this.state = {
             filters: [],
-            moreFilters: false,
+            moreFilters: true,
             opportunities: null,
             organizations: null,
             selected: null,
@@ -162,38 +162,38 @@ export default class App extends Component {
                             <option>Minneapolis</option>
                             <option>Salt Lake City</option>
                         </select>
-                        <button type="button" className="Button LinkButton" onClick={this.toggleMoreFilters}>More filters</button>
+                        {/*<button type="button" className="Button LinkButton" onClick={this.toggleMoreFilters}>More filters</button>*/}
                     </div>
                     {this.state.moreFilters && (
                         <div className="MoreFilters">
-                            <span>More filters: </span>
+                            <span>Filter by: </span>
                             <input
                                 type="checkbox"
                                 id="individual"
                                 onChange={this.toggleFilter('individual', true).bind(this)}
                                 value={this.hasFilter.call(this, 'individual')} />
-                            <label htmlFor="individual">individual</label>
-
-                            <input
-                                type="checkbox"
-                                id="family"
-                                onChange={this.toggleFilter('family', true).bind(this)}
-                                value={this.hasFilter.call(this, 'family')} />
-                            <label htmlFor="family">family friendly</label>
+                            <label htmlFor="individual">for individuals</label>
 
                             <input
                                 type="checkbox"
                                 id="group"
                                 onChange={this.toggleFilter('group', true).bind(this)}
                                 value={this.hasFilter.call(this, 'group')} />
-                            <label htmlFor="group">group friendly</label>
+                            <label htmlFor="group">for groups</label>
+
+                            <input
+                                type="checkbox"
+                                id="family"
+                                onChange={this.toggleFilter('family', true).bind(this)}
+                                value={this.hasFilter.call(this, 'family')} />
+                            <label htmlFor="family">family-friendly</label>
 
                             <input
                                 type="checkbox"
                                 id="ongoing"
                                 onChange={this.toggleFilter('ongoing', true).bind(this)}
                                 value={this.hasFilter.call(this, 'ongoing')} />
-                            <label htmlFor="ongoing">ongoing</label>
+                            <label htmlFor="ongoing">long-term</label>
 
                             <input
                                 type="checkbox"
