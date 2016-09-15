@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 
 export default class Category extends Component {
     render () {
@@ -6,6 +7,7 @@ export default class Category extends Component {
             name,
             showName,
             textBefore,
+            inverse,
         } = this.props;
         const nameToIconMap = {
             Family: 'child',
@@ -15,7 +17,7 @@ export default class Category extends Component {
             Money: 'money',
         };
         return (
-            <div className={'Category '+ name}>
+            <div className={classnames('Category', name, {'_inverse': inverse})}>
                 <div className="CategoryIcon">
                     <span className={'fa fa-'+ nameToIconMap[name]}/>
                 </div>

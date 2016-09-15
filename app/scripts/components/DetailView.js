@@ -1,10 +1,21 @@
 import React, {Component} from 'react';
 import {parse} from 'markdown';
 
+import Button from './Button';
 import Category from './Category';
+
+import AppBar from 'material-ui/AppBar';
+import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
+import Paper from 'material-ui/Paper';
+import IconButton from 'material-ui/IconButton';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
 function sendEmail() {
     alert('Great! We’ll send you confirmation email with the time, address, and reassurance that someone will be expecting you. Go ahead and add it to your calendar, but we’ll also send you a reminder email a day before the event.');
+}
+
+function saveForLater() {
+    alert('We will save this opportunity to a list for you to check at a later time.');
 }
 
 export default class DetailView extends React.Component {
@@ -42,31 +53,48 @@ export default class DetailView extends React.Component {
         );
 
         return (
-            <div className="DetailView">
-                <button className="DetailClose" onClick={this.props.closeView}>&times;</button>
+            <Paper className="DetailView" zDepth={4} rounded={false}>
+                <Paper zDepth={2} rounded={false}>
+                    <Toolbar>
+                        <ToolbarGroup
+                            firstChild={true}
+                            style={{
+                                alignItems: 'center'
+                            }}
+                        >
+                            <IconButton onClick={this.props.closeView}><NavigationClose /></IconButton>
+                            <ToolbarTitle text="Opportunity Details"/>
+                        </ToolbarGroup>
+                    </Toolbar>
+                </Paper>
+
                 <div className="DetailBody">
-                    <h3>{categories.map((category) => (
-                      <Category
-                        key={category}
-                        name={category}
-                        showName
-                        textBefore="Helping People Without"/>))}</h3>
                     <img src={imageUrl}/>
-                    <h2>{title}</h2>
-                    <p><strong>{starts}</strong></p>
-                    <div dangerouslySetInnerHTML={{__html: parse(description)}}/>
-                    <p><strong>Location: </strong> 1 Infinite Loop, Cupertino, CA 95014</p>
-                    {filterDetails}
-                    <div className="DetailsOrganization">
-                        <h3>About {organization.name}</h3>
-                        <p>{organization.bio}</p>
-                        <p><a href={organization.website} target="_belong-organization">Visit website</a>  •  (312) 867-5309</p>
+                    <div className="DetailBody-content">
+                        {categories.map((category) => (
+                            <Category
+                                key={category}
+                                name={category}
+                                showName
+                                textBefore="Helping People Without"/>)
+                        )}
+                        <h2>{title}</h2>
+                        <p><strong>{starts}</strong></p>
+                        <div dangerouslySetInnerHTML={{__html: parse(description)}}/>
+                        <p><strong>Location: </strong> 1 Infinite Loop, Cupertino, CA 95014</p>
+                        {filterDetails}
+                        <div className="DetailsOrganization">
+                            <h3>About {organization.name}</h3>
+                            <p>{organization.bio}</p>
+                            <p><a href={organization.website} target="_belong-organization">Visit website</a>  •  (312) 867-5309</p>
+                        </div>
                     </div>
                 </div>
-                <div className="DetailFoot">
-                    <button className="Button DetailFootButton" type="button" onClick={sendEmail}>Count me in!</button>
-                </div>
-            </div>
+                <Paper className="DetailFoot" zDepth={1}>
+                    <Button label="Count me in!" onClick={sendEmail} raised={true} primary={true} />
+                    <Button label="Save for later" onClick={saveForLater} style={{marginLeft: '1rem'}} />
+                </Paper>
+            </Paper>
         );
     }
 }

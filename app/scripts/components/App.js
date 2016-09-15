@@ -1,32 +1,25 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import classnames from 'classnames';
+
 import * as API from './API';
 
-import Category from './Category';
+import AuthDialog from './AuthDialog';
 import DetailView from './DetailView';
+import Button from './Button';
+import Callout from './Callout';
+import FilterDialog from './FilterDialog';
+import FilterBar from './FilterBar';
 import ListItem from './ListItem';
+import Modal from './Modal';
+import TopNavigation from './TopNavigation';
 
-function booleanFilter(things, property) {
-    return things.filter((thing) => thing[property]);
-}
+import Avatar from 'material-ui/Avatar';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import Paper from 'material-ui/Paper';
+import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 
-const Filters = {
-    category: function (opportunities, category) {
-        return opportunities.filter((opportunity) => opportunity.categories && opportunity.categories.indexOf(category) > -1);
-    },
-    individual: (opportunities) => booleanFilter(opportunities, 'individual'),
-    family: (opportunities) => booleanFilter(opportunities, 'family'),
-    group: (opportunities) => booleanFilter(opportunities, 'group'),
-    oneTime: (opportunities) => booleanFilter(opportunities, 'oneTime'),
-    ongoing: (opportunities) => booleanFilter(opportunities, 'ongoing'),
-};
-
-const Callouts = {
-    'Homes': 'On any given night, there are over 43 million children who sleep with no roof over their heads. What if we could provide resources, hope, and a place to belong?',
-    'Health': 'More than 25% of our nation suffers from mental illness alone. Is there a way we could bring healing, hope, and belonging to those without health?',
-    'Money': 'While progress is being made, there are still close to 800 million in our world who are chronically undernourished. Join those providing basic needs for the under-resourced.',
-    'Freedom': 'There are an estimated 4.5 million people trapped in forced sexual exploitation globally. Join the movement to bring freedom and hope to people who are enslaved or imprisoned today.',
-    'Family': '132 million children worldwide are orphans, making them more at risk for trafficking and other dangers. Let’s join those who are trying to bring hope and a place to belong.',
-};
+import Filters from '../helpers/Filters'
 
 export default class App extends Component {
     constructor(props) {
@@ -37,31 +30,72 @@ export default class App extends Component {
             opportunities: null,
             organizations: null,
             selected: null,
+            isModalOpen: false,
+            modal: null,
+            user: window.firebase.auth().currentUser || null,
         };
-        this.setSelected = this.setSelected.bind(this);
-        this.toggleMoreFilters = this.toggleMoreFilters.bind(this);
     }
 
     componentDidMount() {
+        window.firebase.auth().onAuthStateChanged((user)=> {
+            if (user) {
+                this.setState({user});
+            } else {
+                this.setState({user: null});
+            }
+        });
+
+        window.firebase.auth().getRedirectResult().then((result)=> {
+            if (result.credential) {
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                var token = result.credential.accessToken;
+                // ...
+            }
+            // The signed-in user info.
+            // this.setState({user: result.user});
+        }).catch((error)=> {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+        });
+
         API.getOpportunities().then((opportunities) => {
             this.setState({
                 opportunities
             });
         });
-
         API.getOrganizations().then((organizations) => {
-            console.log('orgs: ' + organizations)
             this.setState({
                 organizations
             });
         });
     }
 
-    setSelected(id) {
-        this.setState({selected: id});
-    }
+    signOut = (event)=> {
+        firebase.auth().signOut().then(()=> {
+            // Success
+        }, function (error) {
+            // An error happened.
+        });
+    };
 
-    removeFilter(name) {
+    toggleModal = (type = null)=> {
+        this.setState({
+            isModalOpen: !this.state.isModalOpen,
+            modal: type
+        });
+    };
+
+    setSelected = (id)=> {
+        this.setState({selected: id});
+    };
+
+    removeFilter = (name)=> {
         const currentState = this.state;
         const hadFilter = currentState.filters.find((filter) => {
             if (filter.name == name) {
@@ -73,19 +107,19 @@ export default class App extends Component {
         });
         this.setState(Object.assign({}, currentState));
         return hadFilter;
-    }
+    };
 
-    hasFilter(name) {
+    hasFilter = (name)=> {
         const currentState = this.state;
         return !!currentState.filters.find((filter) => {
             return filter.name == name;
         });
-    }
+    };
 
-    toggleFilter(name, isBoolean = false) {
-        return (event) => {
+    toggleFilter = (name, isBoolean = false)=> {
+        return (event, index, value) => {
+            if (typeof value == 'undefined' && index) value = index;
             const currentState = this.state;
-            const value = event.target.value;
             const hadFilter = this.removeFilter(name);
             if (value && (!isBoolean || !hadFilter)) {
                 currentState.filters.push({
@@ -95,10 +129,6 @@ export default class App extends Component {
                 this.setState(Object.assign({}, currentState, {selected: null}));
             }
         }
-    }
-
-    toggleMoreFilters() {
-        this.setState({moreFilters: !this.state.moreFilters});
     }
 
     render() {
@@ -112,103 +142,122 @@ export default class App extends Component {
         const category = this.state.filters.find((filter) => filter.name == 'category');
         const categoryName = category ? category.value : 'things';
         const callout = category && (
-                <div className="Callout">
-                    <h1>
-                        <Category
-                            name={categoryName}
-                            showName
-                            textBefore="Without"/>
-                    </h1>
-                    <p>{Callouts[categoryName]}</p>
-                    <a href="#">Learn more</a>
-                </div>
+                <Callout
+                    category={categoryName}
+                />
             );
         const selectedOpportunity = this.state.selected != null && opportunities[this.state.selected];
         const selectedOrg = this.state.selected != null && this.state.organizations.find(org => org.name == selectedOpportunity.organization);
+        const topButton = this.state.user ? (
+            <IconMenu
+                label={this.state.user.displayName}
+                iconButtonElement={<Avatar size={32} src={this.state.user.photoURL}/>}
+                anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+                targetOrigin={{horizontal: 'right', vertical: 'top'}}
+            >
+                <MenuItem
+                    primaryText="I’m a volunteer"
+                    rightIcon={<ArrowDropRight />}
+                    menuItems={[
+                        <MenuItem primaryText="I’m a volunteer" checked={true} />,
+                        <MenuItem primaryText="I’m a group leader" />,
+                        <MenuItem primaryText="I’m a nonprofit" />
+                    ]}
+                />
+                <MenuItem primaryText="Settings"/>
+                <MenuItem primaryText="Send feedback"/>
+                <MenuItem
+                    primaryText="Sign out"
+                    onClick={this.signOut}
+                />
+            </IconMenu>
+        ) : (
+            <Button
+                label="Sign in"
+                onClick={this.toggleModal.bind(this, 'AUTH')}
+            />
+        );
+
+        let modal;
+        switch (this.state.modal) {
+            case 'AUTH':
+                modal = <AuthDialog />;
+                break;
+            case 'FILTER':
+                const filters = {};
+                this.state.filters.map((filter) => {
+                    filters[filter.name] = filter.value;
+                });
+
+                modal = (
+                    <FilterDialog
+                        filters={filters}
+                        toggleFilter={this.toggleFilter}
+                    />
+                );
+                break;
+            default:
+                modal = null;
+        }
 
         return (
-            <div className={'Belong'+ (this.state.selected !== null ? ' selected' : '')}>
-                <div className="DetailView-container">
-                    {this.state.selected !== null && opportunities[this.state.selected] && <DetailView {...selectedOpportunity} organization={selectedOrg} closeView={this.setSelected.bind(this, null)} />}
-                </div>
+            <div className={classnames('Belong', {selected: this.state.selected !== null})}>
+                <TopNavigation topButton={topButton}/>
 
                 <div className="Belong-main">
-                    <div className="Header">
-                        <div>
-                            I’m a
-                            <select style={{marginLeft: '10px'}}>
-                                <option>Volunteer</option>
-                                <option>Group Leader</option>
-                                <option>Nonprofit</option>
-                            </select>
-                        </div>
-                        <h1>Belong</h1>
-                        <button className="Button LinkButton" type="button">Sign in</button>
+                    <Paper
+                        zDepth={2}
+                        rounded={false}
+                        style={{
+                            zIndex: 2,
+                            position: 'relative',
+                            overflow: 'hidden'
+                        }}
+                    >
+                        <FilterBar
+                            toggleCategory={this.toggleFilter('category').bind(this)}
+                            openModal={this.toggleModal.bind(this, 'FILTER')}
+                        />
+                    </Paper>
+
+                    <div className="List">
+                        {callout}
+                        {opportunities && opportunities.map((opportunity, index) => {
+                            return (
+                                <ListItem key={index} onClick={this.setSelected.bind(null, index)} {...opportunity}/>
+                            );
+                        })}
+                        {!opportunities || opportunities.length == 0 && (
+                            <div className="EmptyState">
+                                <h2>No opportunities found.</h2>
+                                <p>Try clearing some filters.</p>
+                            </div>
+                        )}
                     </div>
-                    <div className="MainFilters">
-                        <span>Help people </span>
-                        <select onChange={this.toggleFilter('category').bind(this)}>
-                            <option value="" default>in any need</option>
-                            <option value="Family">without family</option>
-                            <option value="Health">without health</option>
-                            <option value="Freedom">without freedom</option>
-                            <option value="Homes">without homes</option>
-                            <option value="Money">without money</option>
-                        </select>
-                        <span> near </span>
-                        <select>
-                            <option>Chicago</option>
-                            <option>Los Angeles</option>
-                            <option>Minneapolis</option>
-                            <option>Salt Lake City</option>
-                        </select>
-                        {/*<button type="button" className="Button LinkButton" onClick={this.toggleMoreFilters}>More filters</button>*/}
-                    </div>
-                    {this.state.moreFilters && (
-                        <div className="MoreFilters">
-                            <span>Filter by: </span>
-                            <input
-                                type="checkbox"
-                                id="individual"
-                                onChange={this.toggleFilter('individual', true).bind(this)}
-                                value={this.hasFilter.call(this, 'individual')} />
-                            <label htmlFor="individual">for individuals</label>
-
-                            <input
-                                type="checkbox"
-                                id="group"
-                                onChange={this.toggleFilter('group', true).bind(this)}
-                                value={this.hasFilter.call(this, 'group')} />
-                            <label htmlFor="group">for groups</label>
-
-                            <input
-                                type="checkbox"
-                                id="family"
-                                onChange={this.toggleFilter('family', true).bind(this)}
-                                value={this.hasFilter.call(this, 'family')} />
-                            <label htmlFor="family">family-friendly</label>
-
-                            <input
-                                type="checkbox"
-                                id="ongoing"
-                                onChange={this.toggleFilter('ongoing', true).bind(this)}
-                                value={this.hasFilter.call(this, 'ongoing')} />
-                            <label htmlFor="ongoing">long-term</label>
-
-                            <input
-                                type="checkbox"
-                                id="oneTime"
-                                onChange={this.toggleFilter('oneTime', true).bind(this)}
-                                value={this.hasFilter.call(this, 'oneTime')} />
-                            <label htmlFor="oneTime">one-time</label>
-                        </div>
-                    )}
-                    {callout}
-                    {opportunities && opportunities.map((opportunity, index) => {
-                        return <ListItem key={index} onClick={this.setSelected.bind(null, index)} {...opportunity}/>;
-                    })}
-                    {opportunities && opportunities.length == 0 && <h2>No opportunities found with selected filters.</h2>}
                 </div>
+
+                <div className="DetailView-container">
+                    {
+                        this.state.selected !== null &&
+                        opportunities[this.state.selected] &&
+                        <DetailView
+                            {...selectedOpportunity}
+                            organization={selectedOrg}
+                            closeView={this.setSelected.bind(this, null)}
+                        />
+                    }
+                </div>
+
+                {this.state.isModalOpen && this.state.modal && (
+                    <Modal
+                        contentStyle={{maxWidth: '400px'}}
+                        open={this.state.isModalOpen}
+                        handleClose={this.toggleModal.bind(this)}
+                        autoScrollBodyContent={true}
+                    >
+                        {modal}
+                    </Modal>
+                )}
             </div>
         );
     }

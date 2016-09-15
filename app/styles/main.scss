@@ -1,8 +1,10 @@
 @import "components/normalize";
+
 @import "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css";
 
 $color-primary: #4CAF50;
 $color-primary-dark: #43A047;
+$breakpoint-desktop: 960px;
 
 body {
     color: #607D8B;
@@ -11,40 +13,30 @@ body {
 }
 
 h1 {
-    font-size: 2rem;
+    font-size: 1vw;
 }
 
-[type=checkbox] {
-    margin-right: .3em;
-}
-
-img { max-width: 100%; }
-button {
-    cursor: pointer;
-    font-weight: bold;
-}
-.Button {
-    background: white;
-    border: 2px solid $color-primary;
-    border-radius: 4px;
-    color: $color-primary;
-    padding: 10px;
-}
-.Button:hover {
-    background: $color-primary;
-    color: white;
-}
 .Belong-main {
-    margin: 0 auto;
-    max-width: 50%;
-    min-height: 100vh;
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    height: calc(100% - 50px);
     background: #fff;
     transition: all 300ms ease-out;
 }
-.Belong.selected .Belong-main {
-    transform: translateX(-50%);
-    box-shadow: 0 0 20px rgba(black,.19), 0 6px 6px rgba(black,.23);
+.Belong-navigation {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 3;
 }
+@media screen and (min-width: $breakpoint-desktop){
+    .Belong.selected .Belong-main {
+        width: 60vw;
+    }
+}
+
 .Header {
     align-items: center;
     border-bottom: 3px solid #B0BEC5;
@@ -57,18 +49,19 @@ button {
     padding: 10px 20px;
 }
 .MoreFilters {
+    display: flex;
     border-bottom: 2px solid #B0BEC5;
     padding: 10px 20px;
+    > * {
+        flex: 0 1 auto;
+        max-width: 20%;
+    }
 }
-.LinkButton {
-    border: none;
-    text-decoration: underline;
-    margin-left: 10px;
+.EmptyState {
+    text-align: center;
+    padding: 4.5rem 2vw;
+    background: #f7f7f7;
 }
-.MoreFilters label {
-    margin-right: 10px;
-}
-
 .Callout {
     background: #eee;
     padding: 20px;
@@ -78,90 +71,70 @@ button {
     display: flex;
 }
 .CategoryIcon {
-    align-items: center;
-    border-radius: 50%;
-    border: 2px solid $color-primary;
     color: $color-primary;
-    display: flex;
-    height: 40px;
-    justify-content: center;
     margin-right: 10px;
-    width: 40px;
+    .Category._inverse & {
+        color: white;
+    }
 }
 .CategoryIcon .fa {
     font-size: 20px;
 }
-.ListItem {
-    align-items: center;
-    border-top: 1px solid #ddd;
+.List {
     display: flex;
-    padding: 20px;
-    cursor: pointer;
-}
-.ListItemImage {
-    width: 200px;
-}
-.ListItemDetails {
-    align-self: stretch;
-    flex: 1;
-    padding: 0 20px;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: calc(100% - 2vw - 50px);
+    padding: 2vw 0;
+    > * {
+        flex: 1 1 250px;
+        min-width: 250px;
+        max-width: 400px;
+        margin: .5rem;
+        max-height: 500px;
+    }
 }
 .DetailView-container {
-    background: #fff;
     position: fixed;
+    top: 50px;
     right: 0;
-    top: 0;
-    width: 50%;
-    height: 100%;
-    transform: translateX(100%);
-    transition: transform 300ms ease-out;
+    background: #fff;
+    height: calc(100% - 50px);
+    width: 0;
+    transition: all 300ms ease-out;
+    z-index: 4;
+    flex-basis: 0;
 }
 .Belong.selected .DetailView-container {
-    transform: translateX(0);
+    width: 100vw;
 }
 .DetailView {
     display: flex;
     flex-direction: column;
+    width: 100vw;
     height: 100%;
 }
-.DetailClose {
-    position: fixed;
-    top: 10px;
-    right: 40px;
-    padding: 10px;
-
-    background: none;
-    border: 0;
-    color: $color-primary;
-    font-size: 2rem;
-    line-height: 2rem;
-    &:hover {
-        color: $color-primary-dark;
+@media screen and (min-width: $breakpoint-desktop){
+    .DetailView,
+    .Belong.selected .DetailView-container {
+        width: 40vw;
     }
 }
 .DetailBody {
     flex: 1;
     overflow-y: auto;
-    padding: 0 40px 40px;
 
     img {
-        width: 400px;
+        width: 100%;
+    }
+    &-content {
+        padding: 2vw;
     }
 }
 .DetailsOrganization {
     margin-top: 3rem;
 }
 .DetailFoot {
-    padding: 20px;
-    box-shadow: 0 0 6px rgba(black,.16), 0 3px 6px rgba(black,.23);
-}
-.DetailFootButton {
-    background: $color-primary;
-    color: white;
-    font-size: 1.2rem;
-    max-width: 300px;
-    width: 100%;
-}
-.DetailFootButton:hover {
-    background: $color-primary-dark;
+    padding: 2vw;
 }

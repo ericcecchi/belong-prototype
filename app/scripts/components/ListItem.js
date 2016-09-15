@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 
+import Button from './Button';
 import Category from './Category';
+
+import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 
 export default class ListItem extends Component {
   render () {
@@ -12,21 +15,18 @@ export default class ListItem extends Component {
       title,
     } = this.props;
     return (
-      <div className="ListItem" onClick={onClick}>
-        {false && <div>
-          <Category name={categories[0]} />
-        </div>}
-        <div>
-          <img className="ListItemImage" src={imageUrl} />
-        </div>
-        <div className="ListItemDetails">
-          <h2>{title}</h2>
-          {organization}
-        </div>
-        <div>
-          <button className="Button ListItemButton" type="button">Learn more</button>
-        </div>
-      </div>
+      <Card onClick={onClick}>
+          <CardMedia>
+              <img src={imageUrl} />
+          </CardMedia>
+          <CardTitle
+              title={title}
+              subtitle={organization}
+          />
+          <CardActions>
+              <Button label="Learn more" />
+          </CardActions>
+      </Card>
     );
   }
 }
