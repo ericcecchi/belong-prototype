@@ -1,7 +1,10 @@
 import ajax from 'axios';
-import Categories from '../fixtures/Categories';
-import Opportunites from '../fixtures/Opportunities';
-import Organizations from '../fixtures/Organizations';
+// import Categories from '../fixtures/Categories';
+// import Opportunites from '../fixtures/Opportunities';
+// import Organizations from '../fixtures/Organizations';
+
+let Categories = [];
+let Organizations = [];
 
 function csvToArray(string) {
     return string ? string.split(',') : [];
@@ -58,7 +61,6 @@ function wpToCategories(response) {
         .filter((category) => !!category.name);
 }
 
-
 function wpToOpportunities(response) {
     return response.data
         .map(opportunity => {
@@ -109,7 +111,8 @@ export function getCatgories() {
     return new Promise((resolve) => {
         ajax.get('https://belong-marketplace.herokuapp.com/wp-json/wp/v2/categories')
             .then(response => {
-                resolve(wpToCategories(response));
+                Categories = wpToCategories(response);
+                resolve(Categories);
             });
     });
 }
@@ -122,7 +125,8 @@ export function getOrganizations() {
     return new Promise((resolve) => {
         ajax.get('https://belong-marketplace.herokuapp.com/wp-json/wp/v2/organizations?per_page=100')
             .then(response => {
-                resolve(wpToOrganizations(response));
+                Organizations = wpToOrganizations(response);
+                resolve(Organizations);
             });
     });
 }
