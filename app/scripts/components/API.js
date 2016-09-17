@@ -94,8 +94,8 @@ function wpToOrganizations(response) {
                 id: org['id'],
                 name: org['name'],
                 bio: org['description'],
-                website: 'http://google.com', //org['acf']['website'],
-                logo: 'http://google.com' //org['acf']['logo']
+                website: 'https://google.com', //org['acf']['website'],
+                logo: 'https://google.com' //org['acf']['logo']
             }
         })
         .filter((org) => !!org.name);
@@ -107,7 +107,7 @@ export function getCatgories() {
     // };
     // return new Promise((resolve) => resolve(wpToCategories(response)));
     return new Promise((resolve) => {
-        ajax.get('http://belong-marketplace.herokuapp.com/wp-json/wp/v2/categories')
+        ajax.get('https://belong-marketplace.herokuapp.com/wp-json/wp/v2/categories')
             .then(response => {
                 resolve(wpToCategories(response));
             });
@@ -120,7 +120,7 @@ export function getOrganizations() {
     // };
     // return new Promise((resolve) => resolve(wpToOrganizations(response)));
     return new Promise((resolve) => {
-        ajax.get('http://belong-marketplace.herokuapp.com/wp-json/wp/v2/organizations?per_page=100')
+        ajax.get('https://belong-marketplace.herokuapp.com/wp-json/wp/v2/organizations?per_page=100')
             .then(response => {
                 resolve(wpToOrganizations(response));
             });
@@ -133,7 +133,7 @@ export function getOpportunities() {
     // };
     // return new Promise((resolve) => resolve(wpToOpportunities(response)));
     return new Promise((resolve) => {
-        ajax.get('http://belong-marketplace.herokuapp.com/wp-json/wp/v2/opportunities?per_page=24&_embed')
+        ajax.get('https://belong-marketplace.herokuapp.com/wp-json/wp/v2/opportunities?per_page=24&_embed')
             .then(response => {
                 resolve(wpToOpportunities(response));
             });
