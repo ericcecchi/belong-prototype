@@ -7,7 +7,7 @@ import palette from '../data/Colors';
 import Button from './Button';
 import Category from './Category';
 
-import Callouts from '../data/Callouts';
+import Callouts from '../fixtures/Callouts';
 
 class Callout extends React.Component {
     constructor(props) {
@@ -15,6 +15,7 @@ class Callout extends React.Component {
     }
 
     render() {
+        console.log(this.props.category);
         return (
             <Card
                 style={{
@@ -25,7 +26,7 @@ class Callout extends React.Component {
                 <CardTitle
                     title={
                         <Category
-                            name={this.props.category}
+                            id={this.props.category.id}
                             showName
                             inverse={true}
                             textBefore="Without"
@@ -34,7 +35,7 @@ class Callout extends React.Component {
                     titleColor={Colors.white}
                 />
                 <CardText color={Colors.white}>
-                    {Callouts[this.props.category]}
+                    {Callouts[this.props.category.name]}
                 </CardText>
                 <CardActions>
                     <Button

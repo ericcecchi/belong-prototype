@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {parse} from 'markdown';
+
+import * as API from './API';
 
 import Button from './Button';
 import Category from './Category';
 
-import AppBar from 'material-ui/AppBar';
 import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
@@ -27,15 +27,13 @@ export default class DetailView extends React.Component {
             imageUrl,
             organization,
             title,
+            time,
             family,
             group,
             individual,
             ongoing,
             oneTime,
         } = this.props;
-        const added = (Math.floor(Math.random() * 10) + 1) + ' days ago'
-        const starts = 'Thursday, August 4, 2016 from 7:00–9:00 PM'
-        console.log('selected details', this.props);
         const filters = [];
         if (family) filters.push('Family-friendly');
         if (group) filters.push('Group-friendly');
@@ -71,23 +69,29 @@ export default class DetailView extends React.Component {
                 <div className="DetailBody">
                     <img src={imageUrl}/>
                     <div className="DetailBody-content">
-                        {categories.map((category) => (
-                            <Category
-                                key={category}
-                                name={category}
-                                showName
-                                textBefore="Helping People Without"/>)
-                        )}
-                        <h2>{title}</h2>
-                        <p><strong>{starts}</strong></p>
-                        <div dangerouslySetInnerHTML={{__html: parse(description)}}/>
-                        <p><strong>Location: </strong> 1 Infinite Loop, Cupertino, CA 95014</p>
+                        <h2>
+                            <span dangerouslySetInnerHTML={{__html: title}} />
+                            {organization.name && <span><br/><small dangerouslySetInnerHTML={{__html: organization.name}} /></span>}
+                        </h2>
+
+                        <p>
+                            <strong>{time}</strong> • {categories.map((category) => (
+                                <Category
+                                    key={category}
+                                    id={category}
+                                />)
+                            )}
+                        </p>
+                        <div dangerouslySetInnerHTML={{__html: description}}/>
+                        {location && <p><strong>Location: </strong> {location}</p>}
                         {filterDetails}
-                        <div className="DetailsOrganization">
-                            <h3>About {organization.name}</h3>
-                            <p>{organization.bio}</p>
-                            <p><a href={organization.website} target="_belong-organization">Visit website</a>  •  (312) 867-5309</p>
-                        </div>
+                        {organization.bio && (
+                            <div className="DetailsOrganization">
+                                <h3>About {organization.name}</h3>
+                                <p>{organization.bio}</p>
+                                {organization.website && <p><a href={organization.website} target="_belong-organization">Visit website</a></p>}
+                            </div>
+                        )}
                     </div>
                 </div>
                 <Paper className="DetailFoot" zDepth={1}>

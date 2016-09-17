@@ -1,4 +1,7 @@
 import React from 'react';
+
+import * as API from './API';
+
 import Option from './Option';
 import Select from './Select';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -19,11 +22,11 @@ export default class FilterBar extends React.Component {
                         underlineStyle={{border: 'none'}}
                     >
                         <Option value={null} primaryText="Help people in any need" />
-                        <Option value="Family" primaryText="Help people without family" />
-                        <Option value="Health" primaryText="Help people without health" />
-                        <Option value="Freedom" primaryText="Help people without freedom" />
-                        <Option value="Homes" primaryText="Help people without homes" />
-                        <Option value="Money" primaryText="Help people without money" />
+                        <Option value={API.getCategoryByName('Family').id} primaryText="Help people without family" />
+                        <Option value={API.getCategoryByName('Health').id} primaryText="Help people without health" />
+                        <Option value={API.getCategoryByName('Freedom').id} primaryText="Help people without freedom" />
+                        <Option value={API.getCategoryByName('Homes').id} primaryText="Help people without homes" />
+                        <Option value={API.getCategoryByName('Money').id} primaryText="Help people without money" />
                     </Select>
 
                     <Select

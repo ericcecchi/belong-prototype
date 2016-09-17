@@ -1,4 +1,7 @@
 import ajax from 'axios';
+import Categories from '../fixtures/Categories';
+import Opportunites from '../fixtures/Opportunities';
+import Organizations from '../fixtures/Organizations';
 
 function csvToArray(string) {
     return string ? string.split(',') : [];
@@ -6,6 +9,18 @@ function csvToArray(string) {
 
 function getYoutubeId(videoUrl) {
     return videoUrl && (videoUrl.split('v=')[1] || false);
+}
+
+export function getOrgById(id) {
+    return Organizations.find((org) => org.id == id) || {};
+}
+
+export function getCategoryByName(name) {
+    return Categories.find((category) => category.name == name) || {};
+}
+
+export function getCategoryById(id) {
+    return Categories.find((category) => category.id == id) || {};
 }
 
 function sheetsToOpportunities(response) {
@@ -32,37 +47,95 @@ function sheetsToOpportunities(response) {
         .filter((opportunity) => !!opportunity.title);
 }
 
-export function getOrganizations() {
-    return new Promise((resolve) => {
-        ajax.get('https://spreadsheets.google.com/feeds/list/1hetYu_LEuuim1efw0aFxv6lOYLjhU8-e7wkIZHupW_o/2/public/full?alt=json')
-            .then(response => {
-                const raw = response.data.feed.entry;
-                const orgs = raw
-                    .map(org => {
-                        return {
-                            id: org['gsx$id']['$t'],
-                            name: org['gsx$name']['$t'],
-                            bio: org['gsx$bio']['$t'],
-                            website: org['gsx$website']['$t'],
-                            logo: org['gsx$logo']['$t']
-                        }
-                    })
-                    .filter((org) => !!org.name);
+function wpToCategories(response) {
+    return response.data
+        .map(category => {
+            return {
+                id: category['id'],
+                name: category['name']
+            }
+        })
+        .filter((category) => !!category.name);
+}
 
-                resolve(orgs);
+
+function wpToOpportunities(response) {
+    return response.data
+        .map(opportunity => {
+            return {
+                id: opportunity['id'],
+                title: opportunity['title']['rendered'],
+                organization: opportunity['organizations'][0],
+                description: opportunity['content']['rendered'],
+                location: opportunity['acf']['location'],
+                time: opportunity['acf']['time'],
+                categories: opportunity['categories'],
+                family: opportunity['acf']['filters'].indexOf('family') > -1,
+                group: opportunity['acf']['filters'].indexOf('group') > -1,
+                individual: opportunity['acf']['filters'].indexOf('individual') > -1,
+                ongoing: opportunity['acf']['filters'].indexOf('ongoing') > -1,
+                oneTime: opportunity['acf']['filters'].indexOf('oneTime') > -1,
+                videoId: getYoutubeId(opportunity['acf']['video']),
+                imageUrl: (
+                    opportunity._embedded &&
+                    opportunity._embedded['wp:featuredmedia'] &&
+                    opportunity._embedded['wp:featuredmedia'][0] &&
+                    opportunity._embedded['wp:featuredmedia'][0]['source_url']
+                ) || 'https://placeholdit.imgix.net/~text?txtsize=75&bg=000000&txtclr=ffffff&txt=BELONG&w=640&h=360&txttrack=0'
+            }
+        })
+        .filter((opportunity) => !!opportunity.title);
+}
+
+function wpToOrganizations(response) {
+    return response.data
+        .map(org => {
+            return {
+                id: org['id'],
+                name: org['name'],
+                bio: org['description'],
+                website: 'http://google.com', //org['acf']['website'],
+                logo: 'http://google.com' //org['acf']['logo']
+            }
+        })
+        .filter((org) => !!org.name);
+}
+
+export function getCatgories() {
+    // const response = {
+    //     data: Categories
+    // };
+    // return new Promise((resolve) => resolve(wpToCategories(response)));
+    return new Promise((resolve) => {
+        ajax.get('http://belong-marketplace.herokuapp.com/wp-json/wp/v2/categories')
+            .then(response => {
+                resolve(wpToCategories(response));
+            });
+    });
+}
+
+export function getOrganizations() {
+    // const response = {
+    //     data: Organizations
+    // };
+    // return new Promise((resolve) => resolve(wpToOrganizations(response)));
+    return new Promise((resolve) => {
+        ajax.get('http://belong-marketplace.herokuapp.com/wp-json/wp/v2/organizations?per_page=100')
+            .then(response => {
+                resolve(wpToOrganizations(response));
             });
     });
 }
 
 export function getOpportunities() {
     // const response = {
-    //     data: require('../data/Opportunities').default
+    //     data: Opportunites
     // };
-    // return new Promise((resolve) => resolve(sheetsToOpportunities(response)));
+    // return new Promise((resolve) => resolve(wpToOpportunities(response)));
     return new Promise((resolve) => {
-        ajax.get('https://spreadsheets.google.com/feeds/list/1hetYu_LEuuim1efw0aFxv6lOYLjhU8-e7wkIZHupW_o/1/public/full?alt=json')
+        ajax.get('http://belong-marketplace.herokuapp.com/wp-json/wp/v2/opportunities?per_page=24&_embed')
             .then(response => {
-                resolve(sheetsToOpportunities(response));
+                resolve(wpToOpportunities(response));
             });
     });
 }

@@ -139,15 +139,14 @@ export default class App extends Component {
                 opportunities = Filters[filter['name']](opportunities, filter['value']);
             });
         }
-        const category = this.state.filters.find((filter) => filter.name == 'category');
-        const categoryName = category ? category.value : 'things';
+        const categoryFilter = this.state.filters.find((filter) => filter.name == 'category');
+        const category = categoryFilter ? API.getCategoryById(categoryFilter.value) : null;
         const callout = category && (
-                <Callout
-                    category={categoryName}
-                />
+                <Callout category={category} />
             );
         const selectedOpportunity = this.state.selected != null && opportunities[this.state.selected];
-        const selectedOrg = this.state.selected != null && this.state.organizations.find(org => org.name == selectedOpportunity.organization);
+        const selectedOrg = this.state.selected != null && API.getOrgById(opportunities[this.state.selected]['organization']);
+        console.log(selectedOrg);
         const topButton = this.state.user ? (
             <IconMenu
                 label={this.state.user.displayName}
@@ -224,7 +223,12 @@ export default class App extends Component {
                         {callout}
                         {opportunities && opportunities.map((opportunity, index) => {
                             return (
-                                <ListItem key={index} onClick={this.setSelected.bind(null, index)} {...opportunity}/>
+                                <ListItem
+                                    key={index}
+                                    onClick={this.setSelected.bind(null, index)}
+                                    {...opportunity}
+                                    organization={API.getOrgById(opportunity.organization)}
+                                />
                             );
                         })}
                         {!opportunities || opportunities.length == 0 && (
