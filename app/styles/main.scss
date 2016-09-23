@@ -99,6 +99,10 @@ h2 small {
         max-width: 400px;
         margin: .5rem;
         max-height: 500px;
+        cursor: pointer;
+        &:hover {
+            box-shadow: rgba(0, 0, 0, 0.117647) 0px 5px 11px, rgba(0, 0, 0, 0.117647) 0px 6px 16px !important;
+        }
     }
 }
 .DetailView-container {

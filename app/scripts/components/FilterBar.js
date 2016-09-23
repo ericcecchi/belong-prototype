@@ -43,7 +43,7 @@ export default class FilterBar extends React.Component {
 
                 <ToolbarGroup lastChild={true}>
                     <RaisedButton
-                        label="More Filters"
+                        label="Filters"
                         onClick={this.props.openModal}
                     />
                 </ToolbarGroup>

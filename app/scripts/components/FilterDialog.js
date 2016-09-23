@@ -11,7 +11,7 @@ class FilterDialog extends React.Component {
     render() {
         return (
             <List>
-                <Subheader>More filters</Subheader>
+                <Subheader>Filters</Subheader>
                 <ListItem
                     primaryText="Groups"
                     secondaryText="Good for 2 or more people"
