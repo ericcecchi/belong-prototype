@@ -38,6 +38,12 @@ import babelify from 'babelify';
 import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
 
+// import {rollup} from 'rollup';
+// import commonjs from 'rollup-plugin-commonjs';
+// import nodeResolve from 'rollup-plugin-node-resolve';
+// import babel from 'rollup-plugin-babel';
+// import uglify from 'rollup-plugin-uglify';
+
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
 
@@ -108,10 +114,42 @@ gulp.task('styles', () => {
         .pipe(gulp.dest('dist/styles'));
 });
 
-// Concatenate and minify JavaScript. Optionally transpiles ES2015 code to ES5.
-// to enable ES2015 support remove the line `"only": "gulpfile.babel.js",` in the
-// `.babelrc` file.
 gulp.task('scripts', () =>
+    // rollup({
+    //     entry: 'app/scripts/main.js',
+    //     sourceMap: true,
+    //     plugins: [
+    //         babel({
+    //             include: ['app/scripts/**', 'node_modules/material-ui/**'],
+    //             exclude: 'node_modules/**',
+    //             babelrc: false,
+    //             presets: [
+    //                 "es2015-rollup",
+    //                 "react",
+    //                 "stage-1"
+    //             ],
+    //             plugins: [
+    //                 "external-helpers"
+    //             ]
+    //         }),
+    //         nodeResolve({
+    //             jsnext: true,
+    //             main: true,
+    //             browser: true,
+    //             extensions: ['.js', '.jsx']
+    //         }),
+    //         commonjs({
+    //             include: 'node_modules/**',
+    //             exclude: [ 'node_modules/material-ui/**']
+    //         }),
+    //         uglify()
+    //     ]
+    // }).then((bundle)=> {
+    //     return bundle.write({
+    //         format: 'iife',
+    //         dest: 'dist/scripts/bundle.js'
+    //     });
+    // })
     browserify({
         entries: './app/scripts/main.js',
         debug: true

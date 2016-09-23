@@ -51,7 +51,8 @@ function sheetsToOpportunities(response) {
 }
 
 function wpToCategories(response) {
-    return response.data
+    const cats = response.data || [];
+    return cats
         .map(category => {
             return {
                 id: category['id'],
@@ -62,7 +63,8 @@ function wpToCategories(response) {
 }
 
 function wpToOpportunities(response) {
-    return response.data
+    const opps = response.data || [];
+    return opps
         .map(opportunity => {
             return {
                 id: opportunity['id'],
@@ -90,7 +92,8 @@ function wpToOpportunities(response) {
 }
 
 function wpToOrganizations(response) {
-    return response.data
+    const orgs = response.data || [];
+    return orgs
         .map(org => {
             return {
                 id: org['id'],
@@ -131,13 +134,13 @@ export function getOrganizations() {
     });
 }
 
-export function getOpportunities() {
+export function getOpportunities(page=1) {
     // const response = {
     //     data: Opportunites
     // };
     // return new Promise((resolve) => resolve(wpToOpportunities(response)));
     return new Promise((resolve) => {
-        ajax.get('https://belong-marketplace.herokuapp.com/wp-json/wp/v2/opportunities?per_page=24&_embed')
+        ajax.get(`https://belong-marketplace.herokuapp.com/wp-json/wp/v2/opportunities?per_page=24&_embed&page=${page}`)
             .then(response => {
                 resolve(wpToOpportunities(response));
             });

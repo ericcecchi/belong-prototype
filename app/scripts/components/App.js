@@ -13,11 +13,13 @@ import ListItem from './ListItem';
 import Modal from './Modal';
 import TopNavigation from './TopNavigation';
 
+import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import Avatar from 'material-ui/Avatar';
+import CircularProgress from 'material-ui/CircularProgress';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import Paper from 'material-ui/Paper';
-import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
+import Waypoint from 'react-waypoint';
 
 import Filters from '../helpers/Filters'
 
@@ -33,6 +35,8 @@ export default class App extends Component {
             isModalOpen: false,
             modal: null,
             user: window.firebase.auth().currentUser || null,
+            isLoading: false,
+            page: 0
         };
     }
 
@@ -64,17 +68,33 @@ export default class App extends Component {
             // ...
         });
 
-        API.getOpportunities().then((opportunities) => {
-            this.setState({
-                opportunities
-            });
-        });
+        this.loadOpportunities();
         API.getOrganizations().then((organizations) => {
             this.setState({
                 organizations
             });
         });
     }
+
+    loadOpportunities = ()=> {
+        if (!this.state.isLoading) {
+            const nextPage = this.state.page + 1;
+            this.setState({
+                page: nextPage,
+                isLoading: true
+            });
+
+            API.getOpportunities(nextPage).then((opportunities) => {
+                const currentOpps = new Set(this.state.opportunities || []);
+                const newOpps = new Set(opportunities);
+                const union = new Set([...currentOpps, ...newOpps]);
+                this.setState({
+                    opportunities: [...union],
+                    isLoading: false
+                });
+            });
+        }
+    };
 
     signOut = (event)=> {
         firebase.auth().signOut().then(()=> {
@@ -238,6 +258,11 @@ export default class App extends Component {
                             </div>
                         )}
                     </div>
+                    {this.state.isLoading && <CircularProgress style={{display: 'block', margin: 'auto'}} />}
+                    <Waypoint
+                        scrollableAncestor={window}
+                        onEnter={this.loadOpportunities}
+                    />
                 </div>
 
                 <div className="DetailView-container">

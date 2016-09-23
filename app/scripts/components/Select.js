@@ -1,7 +1,7 @@
 import React from 'react';
 import DropDownMenu from 'material-ui/DropDownMenu';
 
-export default class Select extends React.Component {
+class Select extends React.Component {
     static defaultProps = {
         autoWidth: true
     };
