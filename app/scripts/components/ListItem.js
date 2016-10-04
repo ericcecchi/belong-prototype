@@ -13,9 +13,12 @@ export default class ListItem extends Component {
     } = this.props;
     return (
       <Card onClick={onClick}>
-          <CardMedia>
-              <img src={imageUrl} />
-          </CardMedia>
+          <CardMedia
+              className="ListItem-image"
+              style={{
+                  backgroundImage: `url(${imageUrl})`
+              }}
+          />
           <CardTitle
               title={<span dangerouslySetInnerHTML={{__html: title}} />}
               subtitle={<span dangerouslySetInnerHTML={{__html: organization.name}} />}
