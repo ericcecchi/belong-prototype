@@ -1,0 +1,14 @@
+.Category {
+  align-items: center;
+  display: inline-flex;
+}
+.CategoryIcon {
+  color: $color-primary;
+  margin-right: 10px;
+  .Category._inverse & {
+    color: white;
+  }
+}
+.CategoryIcon .fa {
+  font-size: 20px;
+}

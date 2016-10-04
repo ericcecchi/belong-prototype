@@ -1,0 +1,17 @@
+h1 {
+  font-size: 1vw;
+}
+h2 {
+  font-weight: 400;
+}
+h2 small {
+  color: rgba(0, 0, 0, 0.541176);
+  font-size: .65em;
+}
+
+p {
+  margin: 0;
+}
+p + * {
+  margin-top: 1rem;
+}

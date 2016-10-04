@@ -27,6 +27,9 @@ class TopNavigation extends React.Component {
                     marginRight: 0
                 }}
                 zDepth={2}
+                style={{
+                    zIndex: 8
+                }}
                 iconElementRight={this.props.topButton}
             >
             </AppBar>
