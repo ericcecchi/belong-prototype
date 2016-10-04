@@ -26,6 +26,7 @@ class TopNavigation extends React.Component {
                     alignItems: 'center',
                     marginRight: 0
                 }}
+                zDepth={2}
                 iconElementRight={this.props.topButton}
             >
             </AppBar>

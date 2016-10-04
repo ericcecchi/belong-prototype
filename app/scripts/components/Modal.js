@@ -14,7 +14,7 @@ export default class Modal extends React.Component {
             <Button
                 label="Done"
                 primary={true}
-                onTouchTap={this.props.handleClose}
+                onClick={this.props.handleClose}
             />
         ];
 

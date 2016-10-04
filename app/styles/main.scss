@@ -2,11 +2,12 @@
 
 @import "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css";
 
-$color-primary: #4CAF50;
+$color-primary: rgb(102, 187, 106);
 $color-primary-dark: #43A047;
 $breakpoint-desktop: 960px;
 
 body {
+    background: #f9f9f9;
     color: #607D8B;
     font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 16px;
@@ -23,12 +24,15 @@ h2 small {
     font-size: .65em;
 }
 
+p {
+    margin: 0;
+}
+p + * {
+    margin-top: 1rem;
+}
+
 .Belong-main {
-    position: absolute;
-    top: 50px;
-    width: 100%;
-    height: calc(100% - 50px);
-    background: #fff;
+    margin-top: 50px;
     transition: all 300ms ease-out;
 }
 .Belong-navigation {
@@ -39,8 +43,9 @@ h2 small {
     z-index: 3;
 }
 @media screen and (min-width: $breakpoint-desktop){
-    .Belong.selected .Belong-main {
-        width: 60vw;
+    .Belong.selected .Belong-main,
+    .Belong.selected .Belong-navigation {
+        width: 60vw !important;
     }
 }
 
@@ -50,6 +55,12 @@ h2 small {
     display: flex;
     justify-content: space-between;
     padding: 0 20px;
+}
+.FilterBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 300ms ease-out;
 }
 .MainFilters {
     border-bottom: 1px solid #B0BEC5;
@@ -107,13 +118,13 @@ h2 small {
 }
 .DetailView-container {
     position: fixed;
-    top: 50px;
+    top: 0;
     right: 0;
     background: #fff;
-    height: calc(100% - 50px);
+    height: 100%;
     width: 0;
     transition: all 300ms ease-out;
-    z-index: 4;
+    z-index: 1111;
     flex-basis: 0;
 }
 .Belong.selected .DetailView-container {
@@ -131,6 +142,27 @@ h2 small {
         width: 40vw;
     }
 }
+.DetailView-image {
+    position: relative;
+    height: 6.25vh;
+    overflow: hidden;
+    display: flex;
+    background: $color-primary;
+    flex-direction: column;
+    justify-content: center;
+    img {
+        display: none;
+        max-width: 100%;
+        flex: 0 0 auto;
+    }
+}
+.DetailBody-head {
+    padding: 1rem 2rem;
+    background: $color-primary;
+    h2 {
+        margin: 0;
+    }
+}
 .DetailBody {
     flex: 1;
     overflow-y: auto;
@@ -139,12 +171,12 @@ h2 small {
         width: 100%;
     }
     &-content {
-        padding: 2vw;
+        padding: 2rem;
     }
 }
 .DetailsOrganization {
     margin-top: 3rem;
 }
 .DetailFoot {
-    padding: 2vw;
+    padding: .5rem;
 }

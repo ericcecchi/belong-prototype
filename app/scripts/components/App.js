@@ -18,7 +18,6 @@ import Avatar from 'material-ui/Avatar';
 import CircularProgress from 'material-ui/CircularProgress';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import Paper from 'material-ui/Paper';
 import Waypoint from 'react-waypoint';
 
 import Filters from '../helpers/Filters'
@@ -225,20 +224,10 @@ export default class App extends Component {
                 <TopNavigation topButton={topButton}/>
 
                 <div className="Belong-main">
-                    <Paper
-                        zDepth={2}
-                        rounded={false}
-                        style={{
-                            zIndex: 2,
-                            position: 'relative',
-                            overflow: 'hidden'
-                        }}
-                    >
-                        <FilterBar
-                            toggleCategory={this.toggleFilter('category').bind(this)}
-                            openModal={this.toggleModal.bind(this, 'FILTER')}
-                        />
-                    </Paper>
+                    <FilterBar
+                        toggleCategory={this.toggleFilter('category').bind(this)}
+                        openModal={this.toggleModal.bind(this, 'FILTER')}
+                    />
 
                     <div className="List">
                         {callout}

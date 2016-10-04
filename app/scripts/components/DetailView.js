@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 
-import * as API from './API';
-
 import Button from './Button';
 import Category from './Category';
 
-import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import NavigationBack from 'material-ui/svg-icons/navigation/arrow-back';
+
+import palette from '../data/Colors';
 
 function sendEmail() {
     alert('Great! We’ll send you confirmation email with the time, address, and reassurance that someone will be expecting you. Go ahead and add it to your calendar, but we’ll also send you a reminder email a day before the event.');
@@ -52,28 +51,39 @@ export default class DetailView extends React.Component {
 
         return (
             <Paper className="DetailView" zDepth={4} rounded={false}>
-                <Paper zDepth={2} rounded={false}>
-                    <Toolbar>
-                        <ToolbarGroup
-                            firstChild={true}
-                            style={{
-                                alignItems: 'center'
-                            }}
-                        >
-                            <IconButton onClick={this.props.closeView}><NavigationClose /></IconButton>
-                            <ToolbarTitle text="Opportunity Details"/>
-                        </ToolbarGroup>
-                    </Toolbar>
+                <div className="DetailView-image">
+                    <IconButton
+                        onClick={this.props.closeView}
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0
+                        }}
+                        iconStyle={{
+                            fill: 'white'
+                        }}
+                    >
+                        <NavigationBack />
+                    </IconButton>
+                    <img src={imageUrl}/>
+                </div>
+
+                <Paper
+                    rounded={false}
+                    className="DetailBody-head"
+                    style={{
+                        background: palette.primary1Color,
+                        color: 'white'
+                    }}
+                >
+                    <h2>
+                        <span dangerouslySetInnerHTML={{__html: title}} />
+                        {organization.name && <span><br/><small style={{color: 'white'}} dangerouslySetInnerHTML={{__html: organization.name}} /></span>}
+                    </h2>
                 </Paper>
 
                 <div className="DetailBody">
-                    <img src={imageUrl}/>
                     <div className="DetailBody-content">
-                        <h2>
-                            <span dangerouslySetInnerHTML={{__html: title}} />
-                            {organization.name && <span><br/><small dangerouslySetInnerHTML={{__html: organization.name}} /></span>}
-                        </h2>
-
                         <p>
                             <strong>{time}</strong> • {categories.map((category) => (
                                 <Category
@@ -83,7 +93,7 @@ export default class DetailView extends React.Component {
                             )}
                         </p>
                         <div dangerouslySetInnerHTML={{__html: description}}/>
-                        {location && <p><strong>Location: </strong> {location}</p>}
+                        {location && <p style={{marginTop: '1rem'}}><strong>Location: </strong> {location}</p>}
                         {filterDetails}
                         {organization.bio && (
                             <div className="DetailsOrganization">
@@ -94,8 +104,9 @@ export default class DetailView extends React.Component {
                         )}
                     </div>
                 </div>
+
                 <Paper className="DetailFoot" zDepth={1}>
-                    <Button label="Count me in!" onClick={sendEmail} raised={true} primary={true} />
+                    <Button label="Count me in!" onClick={sendEmail} primary={true} />
                     <Button label="Save for later" onClick={saveForLater} style={{marginLeft: '1rem'}} />
                 </Paper>
             </Paper>

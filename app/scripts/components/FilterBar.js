@@ -4,8 +4,9 @@ import * as API from './API';
 
 import Option from './Option';
 import Select from './Select';
-import RaisedButton from 'material-ui/RaisedButton';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import IconButton from 'material-ui/IconButton';
+import FilterList from 'material-ui/svg-icons/content/filter-list';
+import Paper from 'material-ui/Paper';
 
 export default class FilterBar extends React.Component {
     constructor(props) {
@@ -14,11 +15,19 @@ export default class FilterBar extends React.Component {
 
     render() {
         return (
-            <Toolbar>
-                <ToolbarGroup firstChild={true}>
+            <Paper
+                className="FilterBar"
+                rounded={false}
+                style={{
+                    zIndex: 2,
+                    position: 'relative'
+                }}
+            >
+                <div>
                     <Select
                         defaultValue={null}
                         onChange={this.props.toggleCategory}
+                        style={{height: 'auto'}}
                         underlineStyle={{border: 'none'}}
                     >
                         <Option value={null} primaryText="Help people in any need" />
@@ -29,25 +38,27 @@ export default class FilterBar extends React.Component {
                         <Option value={API.getCategoryByName('Money').id} primaryText="Help people without money" />
                     </Select>
 
-                    <Select
+                    {false && (<Select
                         defaultValue="Chicago"
-                        style={{marginLeft: '10px'}}
+                        style={{height: 'auto', marginLeft: '10px'}}
                         underlineStyle={{border: 'none'}}
                     >
                         <Option value="Chicago" primaryText="near Chicago" />
                         <Option value="Los Angeles" primaryText="near Los Angeles" />
                         <Option value="Minneapolis" primaryText="near Minneapolis" />
                         <Option value="Salt Lake City" primaryText="near Salt Lake City" />
-                    </Select>
-                </ToolbarGroup>
+                    </Select>)}
+                </div>
 
-                <ToolbarGroup lastChild={true}>
-                    <RaisedButton
-                        label="Filters"
+                <div>
+                    <IconButton
+                        tooltip="Filter"
                         onClick={this.props.openModal}
-                    />
-                </ToolbarGroup>
-            </Toolbar>
+                    >
+                        <FilterList />
+                    </IconButton>
+                </div>
+            </Paper>
         );
     }
 }
