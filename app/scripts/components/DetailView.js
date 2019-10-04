@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import classnames from 'classnames';
 
 import Button from './Button';
 import Category from './Category';
@@ -51,7 +52,14 @@ export default class DetailView extends React.Component {
 
         return (
             <Paper className="DetailView" zDepth={4} rounded={false}>
-                <div className="DetailView-image">
+                <div className={
+                    classnames(
+                        'DetailView-image',
+                        {'has-image': imageUrl}
+                        )
+                } style={{
+                    backgroundImage: imageUrl ? 'url(' + imageUrl + ')' : 'none'
+                }}>
                     <IconButton
                         onClick={this.props.closeView}
                         style={{
@@ -65,14 +73,12 @@ export default class DetailView extends React.Component {
                     >
                         <NavigationBack />
                     </IconButton>
-                    <img src={imageUrl}/>
                 </div>
 
                 <Paper
                     rounded={false}
                     className="DetailBody-head"
                     style={{
-                        background: palette.primary1Color,
                         color: 'white'
                     }}
                 >
